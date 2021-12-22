@@ -1,0 +1,8 @@
+# rabbitmq 连接信息
+spring:
+  rabbitmq:
+    host: 1.12.248.64
+    port: 5672
+    username: admin
+    password: qaz123wsx
+    virtual-host: my_vhost

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context
+	   https://www.springframework.org/schema/context/spring-context.xsd
+	   http://www.springframework.org/schema/rabbit
+	   http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+    <!--加载配置文件-->
+<!--    <context:property-placeholder location="classpath:rabbitmq.properties"/>-->
+
+    <!-- 定义rabbitmq connectionFactory -->
+    <rabbit:connection-factory id="connectionFactory" host="1.12.248.64"
+                               port="5672"
+                               username="admin"
+                               password="qaz123wsx"
+                               virtual-host="my_vhost"/>
+    <!-- 消费者，就是一个监听器程序-->
+    <bean id="springQueueListener" class="com.cyscm.listener.SpringQueueListener"/>
+    <bean id="fanoutListener1" class="com.cyscm.listener.SpringQueueListener"/>
+    <bean id="fanoutListener2" class="com.cyscm.listener.SpringQueueListener"/>
+    <bean id="topicListenerStar" class="com.cyscm.listener.SpringQueueListener"/>
+    <bean id="topicListenerWell" class="com.cyscm.listener.SpringQueueListener"/>
+    <bean id="topicListenerWell2" class="com.cyscm.listener.SpringQueueListener"/>
+    <!-- 配置监听器引用，指定从哪个队列中获取消息-->
+    <rabbit:listener-container connection-factory="connectionFactory" auto-declare="true">
+        <rabbit:listener ref="springQueueListener" queue-names="spring_queue"/>
+        <rabbit:listener ref="fanoutListener1" queue-names="spring_fanout_queue_1"/>
+        <rabbit:listener ref="fanoutListener2" queue-names="spring_fanout_queue_2"/>
+        <rabbit:listener ref="topicListenerStar" queue-names="spring_topic_queue_star"/>
+        <rabbit:listener ref="topicListenerWell" queue-names="spring_topic_queue_well"/>
+        <rabbit:listener ref="topicListenerWell2" queue-names="spring_topic_queue_well2"/>
+    </rabbit:listener-container>
+</beans>
